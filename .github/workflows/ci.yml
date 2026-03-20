@@ -45,7 +45,7 @@ jobs:
       - name: Typecheck
         run: pnpm run typecheck
 
-      # A análise do Sonar só começa se os passos acima (Lint/Typecheck) derem sucesso
+      # A análise do Sonar só começa se os passos acima (Lint/Typecheck) derem sucesso.
       - name: SonarCloud Scan
         # Substituímos @master pelo hash estável da versão v3.1.0
         uses: SonarSource/sonarcloud-github-action@db501078e937e4fd9c9e42994406022819776090
