@@ -22,15 +22,18 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        # v4.2.2 (Verificado)
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 
         with:
           fetch-depth: 0
 
       - name: Install pnpm
-        uses: pnpm/action-setup@feaa4771a5390979c5950d226a454df734c2647c # v4.0.0
+        # v4.1.0 (Verificado - Substituindo o anterior que deu erro)
+        uses: pnpm/action-setup@81807662c5b369c76579f1ed74338901248d6194 
 
       - name: Install node
-        uses: actions/setup-node@1d112162839d3823e164320b9971833d1623910b # v4.2.0
+        # v4.2.0 (Verificado)
+        uses: actions/setup-node@1d112162839d3823e164320b9971833d1623910b 
         with:
           node-version: ${{ matrix.node }}
           cache: pnpm
@@ -46,16 +49,16 @@ jobs:
 
   sonarcloud:
     name: SonarCloud Scan
-    needs: ci # Só roda se o lint e o typecheck passarem
+    needs: ci 
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Código
-        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
         with:
           fetch-depth: 0
 
       - name: SonarCloud Scan
-        # SHA fixo para a versão v4.2.1
+        # v4.2.1 (Verificado)
         uses: SonarSource/sonarqube-scan-action@724367c337b56d3575971a1792ca8a221f736024
         with:
           args: >
