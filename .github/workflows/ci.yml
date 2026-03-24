@@ -28,7 +28,7 @@ jobs:
           fetch-depth: 0
 
       - name: Install pnpm
-        uses: pnpm/action-setup@v2c 
+        uses: pnpm/action-setup@v2
         with:
           version: 9 # Garante a versão 9 do pnpm para compatibilidade com Node 22
 
