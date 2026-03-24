@@ -19,24 +19,18 @@ jobs:
     strategy:
       matrix:
         node: [22]
-
     steps:
       - name: Checkout
-        # Commit SHA exato da v4.2.2 (Este já funcionou no seu log)
-        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 
-        with:
-          fetch-depth: 0
+        uses: actions/checkout@v4
 
-      - name: Install Node.js
-        # Commit SHA exato da v4.0.2 (Isso resolve o erro 404 do tarball)
-        uses: actions/setup-node@60edb5dd545a775178f525247833159c28cb0c32 
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: Install node
+        uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node }}
-
-      - name: Install pnpm via Corepack
-        run: |
-          corepack enable
-          corepack prepare pnpm@latest --activate
+          cache: pnpm
 
       - name: Install dependencies
         run: pnpm install
@@ -49,16 +43,15 @@ jobs:
 
   sonarcloud:
     name: SonarCloud Scan
-    needs: ci 
+    needs: ci
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Código
-        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
       - name: SonarCloud Scan
-        # Commit SHA exato da v4.2.1
         uses: SonarSource/sonarqube-scan-action@724367c337b56d3575971a1792ca8a221f736024
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
