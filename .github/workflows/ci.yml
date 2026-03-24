@@ -22,20 +22,19 @@ jobs:
 
     steps:
       - name: Checkout
-        # v4.2.2 (Verificado)
+        # v4.2.2 (Este funcionou no seu log anterior)
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 
         with:
           fetch-depth: 0
 
       - name: Install Node.js
-        # v4.2.0 (Verificado)
-        uses: actions/setup-node@1d112162839d3823e164320b9971833d1623910b 
+        # Trocamos para o SHA da v4.1.0 (Mais estável para resolução de tarball)
+        uses: actions/setup-node@39225597ea6c387142ff13f3ca09bd3316698622 
         with:
           node-version: ${{ matrix.node }}
 
-      - name: Install pnpm
-        # Solução para o erro 404: Usar o Corepack nativo do Node.js.
-        # Isso remove a dependência da Action externa que está falhando no download.
+      - name: Install pnpm via Corepack
+        # Evita erro 404 usando o gerenciador nativo do Node
         run: |
           corepack enable
           corepack prepare pnpm@latest --activate
@@ -51,7 +50,7 @@ jobs:
 
   sonarcloud:
     name: SonarCloud Scan
-    needs: ci # Só executa se o Lint e Typecheck passarem
+    needs: ci # Garante que só analisa se o código estiver íntegro
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Código
@@ -60,7 +59,7 @@ jobs:
           fetch-depth: 0
 
       - name: SonarCloud Scan
-        # v4.2.1 (Verificado)
+        # v4.2.1
         uses: SonarSource/sonarqube-scan-action@724367c337b56d3575971a1792ca8a221f736024
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
