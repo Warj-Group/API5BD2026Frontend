@@ -34,7 +34,7 @@ jobs:
 
       - name: Install node
         # v4.2.0 (Verificado)
-        uses: actions/setup-node@1d112162839d3823e164320b9971833d1623910b 
+        uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node }}
           cache: pnpm
