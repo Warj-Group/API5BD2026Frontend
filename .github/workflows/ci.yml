@@ -28,8 +28,10 @@ jobs:
           fetch-depth: 0
 
       - name: Install pnpm
-        # v4.1.0 (Verificado - Substituindo o anterior que deu erro)
-        uses: pnpm/action-setup@81807662c5b369c76579f1ed74338901248d6194 
+        # v4.0.0 (Verificado - SHA oficial da tag v4.0.0)
+        uses: pnpm/action-setup@feaa4771a5390979c5950d226a454df734c2647c 
+        with:
+          version: 9 # Garante a versão 9 do pnpm para compatibilidade com Node 22
 
       - name: Install node
         # v4.2.0 (Verificado)
@@ -49,7 +51,7 @@ jobs:
 
   sonarcloud:
     name: SonarCloud Scan
-    needs: ci 
+    needs: ci # O Sonar só roda se o Lint e Typecheck passarem
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Código
