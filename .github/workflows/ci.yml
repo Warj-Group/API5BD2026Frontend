@@ -28,8 +28,7 @@ jobs:
           fetch-depth: 0
 
       - name: Install pnpm
-        # v4.0.0 (Verificado - SHA oficial da tag v4.0.0)
-        uses: pnpm/action-setup@feaa4771a5390979c5950d226a454df734c2647c 
+        uses: pnpm/action-setup@v2c 
         with:
           version: 9 # Garante a versão 9 do pnpm para compatibilidade com Node 22
 
