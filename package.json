@@ -2,26 +2,24 @@
   "name": "API5BD2026Frontend",
   "private": true,
   "type": "module",
+  "packageManager": "pnpm@10.29.3",
   "scripts": {
     "build": "nuxt build",
     "dev": "nuxt dev",
+    "generate": "nuxt generate",
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare",
     "lint": "eslint .",
-    "typecheck": "nuxt typecheck"
+    "typecheck": "vue-tsc --noEmit"
   },
   "dependencies": {
-    "@iconify-json/lucide": "^1.2.90",
-    "@iconify-json/simple-icons": "^1.2.70",
-    "@nuxt/ui": "^4.4.0",
-    "nuxt": "^4.3.1",
-    "tailwindcss": "^4.1.18"
+    "@nuxt/ui": "^3.0.0",
+    "nuxt": "^4.0.0"
   },
   "devDependencies": {
-    "@nuxt/eslint": "^1.15.1",
-    "eslint": "^10.0.0",
-    "typescript": "^5.9.3",
-    "vue-tsc": "^3.2.4"
-  },
-  "packageManager": "pnpm@10.29.3"
+    "@nuxt/eslint": "^0.7.0",
+    "eslint": "^9.0.0",
+    "typescript": "^5.0.0",
+    "vue-tsc": "^2.0.0"
+  }
 }
