@@ -2,6 +2,7 @@
   "name": "API5BD2026Frontend",
   "private": true,
   "type": "module",
+  "packageManager": "pnpm@10.29.3",
   "scripts": {
     "build": "nuxt build",
     "dev": "nuxt dev",
