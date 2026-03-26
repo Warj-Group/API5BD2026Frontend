@@ -1,34 +1,63 @@
-name: ci
+name: Frontend CI & SonarCloud
 
-on: push
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+      - sprint-1
+      - sprint-2
+      - sprint-3
+    types: [opened, synchronize, reopened]
 
 jobs:
   ci:
-    runs-on: ${{ matrix.os }}
-
+    name: Lint & Typecheck
+    runs-on: ubuntu-latest
     strategy:
       matrix:
-        os: [ubuntu-latest]
         node: [22]
-
     steps:
       - name: Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@v4
 
       - name: Install pnpm
         uses: pnpm/action-setup@v4
+        with:
+          version: 10.29.3 # Ou a versão específica que você usa: 10.29.3
 
       - name: Install node
-        uses: actions/setup-node@v6
+        uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node }}
           cache: pnpm
 
       - name: Install dependencies
-        run: pnpm install
+        run: pnpm install --no-frozen-lockfile --ignore-scripts
+
+      - name: Prepare Nuxt (Generate types)
+        run: pnpm exec nuxi prepare
 
       - name: Lint
         run: pnpm run lint
 
       - name: Typecheck
         run: pnpm run typecheck
+
+  sonarcloud:
+    name: SonarCloud Scan
+    needs: ci
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Código
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: SonarCloud Scan
+        uses: SonarSource/sonarqube-scan-action@bfd4e558cda28cda6b5defafb9232d191be8c203
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
