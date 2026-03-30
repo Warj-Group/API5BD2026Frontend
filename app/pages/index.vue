@@ -1,3 +1,12 @@
+<!--A instrução layout: false avisa o Nuxt: "Ei, renderize essa página pura, não coloque a barra lateral nem o cabeçalho do default.vue aqui".
+Dessa forma, o seu index.vue volta a ser a tela de "Get Started" limpa, e o seu dashboard oficial existirá apenas quando você acessar /dashboard.
+-->>
+<script setup>
+definePageMeta({
+  layout: false
+})
+</script>
+
 <template>
   <div>
     <UPageHero
