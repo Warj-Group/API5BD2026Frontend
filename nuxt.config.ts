@@ -13,8 +13,18 @@ export default defineNuxtConfig({
 
   app: {
     head: {
-      title: 'WARJ - API 5',
-      meta: [{ name: 'theme-color', content: '#210B45' }]
+      title: 'WARJ Insights',
+      htmlAttrs: {
+        lang: 'pt-BR'
+      },
+      meta: [
+        { name: 'theme-color', content: '#210B45' }, // Roxo Profundo na barra do navegador
+        { name: 'description', content: 'WARJ Insights - Plataforma de Gestão e Análise de Dados.' } // Descrição para o navegador
+      ],
+      link: [
+        // O arquivo favicon.ico DEVE estar na pasta /public
+        { rel: 'icon', type: 'image/x-icon', href: '/warj.ico' }
+      ]
     }
   },
 

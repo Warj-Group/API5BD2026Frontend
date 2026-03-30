@@ -2,7 +2,7 @@
   <div class="flex min-h-screen font-sans bg-warj-bg">
     <aside class="w-64 bg-warj-deep text-white flex flex-col shadow-xl z-20">
       <div class="p-6 flex items-center gap-3 border-b border-white/10">
-        <img src="/WARJ_Logo.png" class="h-8 w-auto" alt="WARJ" />
+        <img src="/warj_logo.png" class="h-8 w-auto" alt="WARJ" >
         <span class="text-xl font-black tracking-tighter">WARJ</span>
       </div>
       
@@ -27,7 +27,7 @@
       </nav>
 
       <div class="p-4 border-t border-white/10">
-        <UButton @click="handleLogout" variant="ghost" color="white" block icon="i-lucide-log-out" class="hover:bg-white/10 transition-colors">
+        <UButton variant="ghost" color="white" block icon="i-lucide-log-out" class="hover:bg-white/10 transition-colors" @click="handleLogout">
           Sair
         </UButton>
       </div>

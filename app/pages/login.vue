@@ -10,14 +10,14 @@
       :ui="{ body: { padding: 'p-10' } }"
     >
       <div class="flex justify-center mb-10">
-        <img src="/warj_logo.png" class="h-32 w-auto" alt="WARJ" />
+        <img src="/warj_logo.png" class="h-32 w-auto" alt="WARJ" >
       </div>
 
       <form class="w-full space-y-4" @submit.prevent="navigateTo('/dashboard')">
         
         <UFormField name="email" class="w-full flex flex-col">
           <template #label>
-            <div class="w-full text-center text-[#210B45] font-bold text-[12px] mb-1 tracking-widest block w-full">
+            <div class="w-full text-left text-[#210B45] font-bold text-[12px] mb-1 tracking-widest block w-full">
               Email address:
             </div>
           </template>
@@ -26,13 +26,13 @@
             size="lg"
             icon="i-lucide-mail"
             variant="outline"
-            class="w-full [&_input]:text-center"
+            class="w-full [&_input]:text-left"
           />
         </UFormField>
 
         <UFormField name="password" class="w-full flex flex-col">
           <template #label>
-            <div class="w-full text-center text-[#210B45] font-bold text-[12px] mb-1 tracking-widest block w-full">
+            <div class="w-full text-left text-[#210B45] font-bold text-[12px] mb-1 tracking-widest block w-full">
               Password:
             </div>
           </template>
@@ -42,7 +42,7 @@
             size="lg"
             icon="i-lucide-lock"
             variant="outline"
-            class="w-full [&_input]:text-center"
+            class="w-full [&_input]:text-left"
           />
         </UFormField>
         
