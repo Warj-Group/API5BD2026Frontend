@@ -1,4 +1,4 @@
-name: Frontend CI & SonarCloud
+name: Frontend CI, Patters & SonarCloud
 
 on:
   push:
@@ -13,51 +13,80 @@ on:
     types: [opened, synchronize, reopened]
 
 jobs:
-  ci:
-    name: Lint & Typecheck
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        node: [22]
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+  validate-git:
+      name: Validar Git (Branch e Commits)
+      runs-on: ubuntu-latest
+      steps:
+        - uses: actions/checkout@v4
+          with:
+            fetch-depth: 0
 
-      - name: Install pnpm
-        uses: pnpm/action-setup@v4
-        with:
-          version: 10.29.3 # Ou a versão específica que você usa: 10.29.3
+        - name: Checar Nome da Branch
+          run: |
+            BRANCH=${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}
+            REGEX="^(main|sprint-[0-9]+)$|^(feature|hotfix|release)\/WARJ-[0-9]+-.+$"
+            if [[ ! $BRANCH =~ $REGEX ]]; then
+              echo "::error::Nome de branch inválido ($BRANCH). Use feature/WARJ-X-nome, hotfix/ ou release/"
+              exit 1
+            fi
+            echo "Nome da branch aprovado: $BRANCH"
 
-      - name: Install node
-        uses: actions/setup-node@v4
-        with:
-          node-version: ${{ matrix.node }}
-          cache: pnpm
+        - name: Checar Padrão do Último Commit
+          run: |
+            COMMIT_MSG=$(git log -1 --pretty=%B)
+            REGEX="^(feat|fix|doc|style|refactor|test|chore|ci)\/(WARJ-[0-9]+|main|sprint-[0-9]+): .+$"
+            if [[ ! "$COMMIT_MSG" =~ $REGEX ]]; then
+              echo "::error::Mensagem de commit fora do padrão! Ex: feat/WARJ-1: Descrição"
+              exit 1
+            fi
+            echo "Mensagem de commit aprovada!"
 
-      - name: Install dependencies
-        run: pnpm install --no-frozen-lockfile --ignore-scripts
+ci:
+  name: Lint & Typecheck
+  needs: validate-git
+  runs-on: ubuntu-latest
+  strategy:
+    matrix:
+      node: [22]
+  steps:
+    - name: Checkout
+      uses: actions/checkout@v4
 
-      - name: Prepare Nuxt (Generate types)
-        run: pnpm exec nuxi prepare
+    - name: Install pnpm
+      uses: pnpm/action-setup@v4
+      with:
+        version: 10.29.3
 
-      - name: Lint
-        run: pnpm run lint
+    - name: Install node
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ matrix.node }}
+        cache: pnpm
 
-      - name: Typecheck
-        run: pnpm run typecheck
+    - name: Install dependencies
+      run: pnpm install --no-frozen-lockfile --ignore-scripts
 
-  sonarcloud:
-    name: SonarCloud Scan
-    needs: ci
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout Código
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
+    - name: Prepare Nuxt (Generate types)
+      run: pnpm exec nuxi prepare
 
-      - name: SonarCloud Scan
-        uses: SonarSource/sonarqube-scan-action@bfd4e558cda28cda6b5defafb9232d191be8c203
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+    - name: Lint
+      run: pnpm run lint
+
+    - name: Typecheck
+      run: pnpm run typecheck
+
+sonarcloud:
+  name: SonarCloud Scan
+  needs: ci
+  runs-on: ubuntu-latest
+  steps:
+    - name: Checkout Código
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+
+    - name: SonarCloud Scan
+      uses: SonarSource/sonarqube-scan-action@bfd4e558cda28cda6b5defafb9232d191be8c203
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
