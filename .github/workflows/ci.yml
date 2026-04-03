@@ -52,32 +52,27 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Install pnpm
-        uses: pnpm/action-setup@v4
-        with:
-          version: 10.29.3
-
       - name: Install node
         uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node }}
-          cache: pnpm
+          cache: npm
 
       - name: Install dependencies
-        run: pnpm install --no-frozen-lockfile --ignore-scripts
+        run: npm install --no-frozen-lockfile --ignore-scripts
 
       - name: Prepare Nuxt (Generate types)
-        run: pnpm exec nuxi prepare
+        run: npm run nuxi prepare
 
       - name: Lint
-        run: pnpm run lint
+        run: npm run lint
 
       - name: Typecheck
-        run: pnpm run typecheck
+        run: npm run typecheck
 
       - name: Test Production Build
         if: github.event_name == 'pull_request'
-        run: pnpm run build
+        run: npm run build
 
   sonarcloud:
     name: SonarCloud Scan
