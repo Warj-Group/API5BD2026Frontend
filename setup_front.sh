@@ -4,17 +4,17 @@ echo "========================================================"
 echo "  WARJ-GROUP - Configurando Ambiente Frontend"
 echo "========================================================"
 
-# 1. Verificar pnpm
-if ! command -v pnpm &> /dev/null; then
-    echo "❌ ERRO: pnpm não encontrado. Por favor, instale o pnpm."
+# 1. Verificar npm
+if ! command -v npm &> /dev/null; then
+    echo "❌ ERRO: npm não encontrado. Por favor, instale o npm."
     exit 1
 fi
 
 echo "📦 [1/4] Instalando dependências..."
-pnpm install
+npm install
 
 echo "🐶 [2/4] Inicializando Husky..."
-pnpm exec husky init
+npm exec husky init
 
 echo "📝 [3/4] Configurando commit-msg hook..."
 cat << 'EOF' > .husky/commit-msg

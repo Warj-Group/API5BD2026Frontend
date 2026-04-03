@@ -3,7 +3,7 @@ name: Frontend CI, Patters & SonarCloud
 on:
   push:
     branches:
-      - main
+      - '**'
   pull_request:
     branches:
       - main
@@ -75,9 +75,14 @@ jobs:
       - name: Typecheck
         run: pnpm run typecheck
 
+      - name: Test Production Build
+        if: github.event_name == 'pull_request'
+        run: pnpm run build
+
   sonarcloud:
     name: SonarCloud Scan
     needs: ci
+    if: github.event_name == 'pull_request'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Código

@@ -5,7 +5,7 @@ echo ========================================================
 echo   WARJ-GROUP - Configurando Ambiente Frontend
 echo ========================================================
 
-:: 1. Verificar se pnpm está instalado
+:: 1. Verificar se npm está instalado
 where npm >nul 2>nul
 if %errorlevel% neq 0 (
     echo [ERRO] npm nao encontrado. Por favor, instale o npm antes de continuar.

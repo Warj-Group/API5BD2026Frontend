@@ -1,130 +1,70 @@
-WARJ-10: Adicionado Sprint-1 para inicialiação do projeto
-# Nuxt Starter Template
 
-[![Nuxt UI](https://img.shields.io/badge/Made%20with-Nuxt%20UI-00DC82?logo=nuxt&labelColor=020420)](https://ui.nuxt.com)
+<div align="center">
+  <img src="public/warj_banner2.png" width="600" alt="Banner API5">
 
-Use this template to get started with [Nuxt UI](https://ui.nuxt.com) quickly.
+  # API5BD2026 - Frontend
 
-- [Live demo](https://starter-template.nuxt.dev/)
-- [Documentation](https://ui.nuxt.com/docs/getting-started/installation/nuxt)
+  [![Nuxt UI](https://img.shields.io/badge/Made%20with-Nuxt%20UI-00DC82?logo=nuxt&labelColor=020420)](https://ui.nuxt.com)
+  [![Vue](https://img.shields.io/badge/Vue.js-4FC08D?style=flat&logo=vuedotjs&logoColor=white)](https://vuejs.org/)
+  [![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=flat&logo=javascript&logoColor=black)](https://developer.mozilla.org/en-US/docs/Web/JavaScript)
+  [![Husky](https://img.shields.io/badge/Husky-64b5f6?style=flat&logo=dog&logoColor=white)](https://typicode.github.io/husky/)
+  [![SonarCloud Quality Gate](https://img.shields.io/sonar/quality_gate/Warj-Group_API5BD2026Frontend?server=https%3A%2F%2Fsonarcloud.io&logo=sonarcloud&style=flat)](https://sonarcloud.io/summary/new_code?id=Warj-Group_API5BD2026Frontend)
+</div>
 
-## Quick Start
+<br>
+
+## Environment Setup
+
+Clone the repository to your local environment and use your preferred IDE (VS Code or WebStorm recommended):
 
 ```bash
-npm install
+git clone https://github.com/Warj-Group/API5BD2026Frontend.git
 ```
+
+### Initial Configuration
+Run the automation script to install dependencies and configure Husky hooks:
+
+* **Windows:** `setup-warj.bat`
+* **Linux/Mac/Git Bash:** `bash setup-warj.sh`
+
+### Execution
+Start the development server:
 
 ```bash
 npm run dev
 ```
-Start the development server on `http://localhost:3000`:
 
-## Lint:
+The project will be available at: `http://localhost:3000`
 
-To view only the errors
-```bash
-npm run lint
-```
+<br>
 
-To fix the errors automatically
-```bash
-npm run lint:fix
-```
-# 📘 Guia de Padronização — Warj-Group (Frontend)
+## Development and Quality
 
-Este guia estabelece as normas de contribuição para manter a **qualidade** e a **rastreabilidade** entre o YouTrack e o GitHub.
+To maintain code consistency and quality according to DevOps principles, we use ESLint for static analysis.
 
----
+* **View errors:** `npm run lint`
+* **Fix errors automatically:** `npm run lint:fix`
 
-## 🧾 1. Padrão de Mensagens de Commit
+<br>
 
-As mensagens devem seguir o formato: `{tipo}/{id_yt}: Descrição`
+## Contribution Guidelines
 
+To ensure traceability between YouTrack tasks and GitHub commits, strictly follow the standards below:
 
-### 🔹 Componentes
+### 1. Commit Messages
+Messages must use the task ID for automatic integration with YouTrack:
+* **Format:** `{type}/{yt_id}: Description`
+* **Example:** `feat/WARJ-1: implement product grid`
 
-- **tipo**: Natureza da alteração (veja tabela abaixo)
-- **id_yt**: ID da tarefa no YouTrack (ex: `WARJ-1`)
-  - Para alterações globais em branches protegidas, use:
-    - `main`
-    - `sprint-X`
-- **Descrição**: Resumo claro e objetivo do que foi feito
+### 2. Branch Naming Convention
+Create working branches linked to the sprint cards:
+* **Format:** `{type}/{yt_id}-brief-description`
+* **Example:** `feature/WARJ-1-product-grid`
 
----
+### 3. Automatic Validation
+The project uses Husky and Commitlint. If the commit standard or linting rules are not followed, the submission (push/commit) will be blocked by the terminal with the appropriate correction instructions.
 
-### 🧩 Tipos Permitidos
+<br>
 
-| Tipo      | Descrição                                              |
-|----------|--------------------------------------------------------|
-| feat     | Nova funcionalidade                                    |
-| fix      | Correção de bug                                        |
-| doc      | Alteração em documentação                              |
-| style    | Formatação/estilo (sem mudança de lógica)              |
-| refactor | Refatoração de código                                  |
-| test     | Adição ou atualização de testes                        |
-| chore    | Manutenção, builds, configs ou bibliotecas             |
-| ci       | Alterações em pipelines de integração contínua         |
-
----
-
-### ✅ Exemplo
-`feat/WARJ-1: Inicializado repositório frontend com Nuxt 3`
-
-
----
-
-## 🌿 2. Padrão de Branches
-
-Branches de trabalho devem seguir o formato:
-`{tipo}/{id_yt}-descricao-breve`
-
-
-### 🔹 Prefixos permitidos
-
-- `feature/`
-- `hotfix/`
-- `release/`
-
-### 🔹 Branches de integração
-
-- `main` → produção  
-- `sprint-X` → desenvolvimento
-
----
-
-### ✅ Exemplo
-`feature/WARJ-1-organize-documentation`
-
-
----
-
-## ⚙️ 3. Configuração Automática
-
-O projeto utiliza:
-
-- **Husky**
-- **Commitlint**
-
-Essas ferramentas validam automaticamente os commits antes de serem realizados.
-
-### 🚫 Importante
-
-Se o padrão não for seguido:
-
-- O commit será bloqueado
-- Um guia de correção será exibido no terminal
-
----
-
-## 🛠️ 4. Como Configurar (Novos Membros)
-
-### 🪟 Windows
-
-Execute: setup-warj.bat
-
-
----
-
-### 🐧 Linux / 🍎 Mac / Git Bash
-
-Execute: bash setup-warj.sh
+## Additional Documentation
+For details on the group's architecture, CI/CD, and design patterns, access our Wiki: [WARJ-GROUP - Wiki Documentation](https://github.com/Warj-Group/API5BD2026Main/wiki)
