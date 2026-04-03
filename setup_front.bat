@@ -2,13 +2,13 @@
 setlocal enabledelayedexpansion
 
 echo ========================================================
-echo   WARJ-GROUP - Configurando Ambiente Frontend
+echo   WARJ-GROUP - Configurando Ambiente FRONTEND (NUXT)
 echo ========================================================
 
-:: 1. Verificar se npm está instalado
+:: 1. Verificar npm
 where npm >nul 2>nul
 if %errorlevel% neq 0 (
-    echo [ERRO] npm nao encontrado. Por favor, instale o npm antes de continuar.
+    echo [ERRO] npm nao encontrado. Por favor, instale o Node.js.
     pause
     exit /b 1
 )
@@ -16,14 +16,31 @@ if %errorlevel% neq 0 (
 echo [1/4] Instalando dependencias do projeto...
 call npm install
 
-echo [2/4] Inicializando Husky...
+echo [2/4] Criando configuracao do Commitlint (Formato ESM)...
+(
+echo export default {
+echo   parserPreset: {
+echo     parserOpts: {
+echo       headerPattern: /^^(feat^|fix^|doc^|style^|refactor^|test^|chore^|ci^)\/(WARJ-\d+^|main^|sprint-\d+^): (.+^)$/,
+echo       headerCorrespondence: ['type', 'scope', 'subject']
+echo     }
+echo   },
+echo   rules: {
+echo     'type-empty': [2, 'never'],
+echo     'subject-empty': [2, 'never'],
+echo     'type-enum': [2, 'always', ['feat', 'fix', 'doc', 'style', 'refactor', 'test', 'chore', 'ci']]
+echo   }
+echo };
+) > commitlint.config.js
+
+echo [3/4] Inicializando Husky...
 call npm exec husky init
 
-echo [3/4] Configurando Hook de Mensagem (commit-msg)...
+echo [4/4] Configurando Hooks de seguranca...
+
+:: Hook de Mensagem
 (
 echo #!/bin/bash
-echo.
-echo # Roda o linter. Se falhar, exibe o guia de uso da Warj-Group
 echo npx commitlint --edit "$1" ^|^| {
 echo   echo -e "\n\033[0;31mXXXX ERRO: Mensagem de commit fora do padrao Warj-Group!\033[0m"
 echo   echo "----------------------------------------------------------------"
@@ -37,11 +54,9 @@ echo   exit 1
 echo }
 ) > .husky\commit-msg
 
-echo [4/4] Configurando Hook de Branch (pre-commit)...
+:: Hook de Branch (Sem checagem de Markdown aqui)
 (
 echo #!/bin/bash
-echo.
-echo # Valida o nome da branch atual
 echo BRANCH=$(git rev-parse --abbrev-ref HEAD^)
 echo REGEX="^^(main^|sprint-[0-9]+^)$^|^^(feature^|hotfix^|release^)\/WARJ-[0-9]+-.+$"
 echo.
@@ -55,6 +70,6 @@ echo fi
 ) > .husky\pre-commit
 
 echo ========================================================
-echo   SUCESSO! Padroes Warj-Group aplicados localmente.
+echo   SUCESSO! Padroes aplicados no Frontend.
 echo ========================================================
 pause
