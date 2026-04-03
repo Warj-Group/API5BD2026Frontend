@@ -59,10 +59,10 @@ jobs:
           cache: npm
 
       - name: Install dependencies
-        run: npm install --no-frozen-lockfile --ignore-scripts
+        run: npm install
 
       - name: Prepare Nuxt (Generate types)
-        run: npm nuxi prepare
+        run: npx nuxi prepare
 
       - name: Lint
         run: npm run lint
