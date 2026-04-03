@@ -31,7 +31,7 @@ jobs:
           fi
           echo "Nome da branch aprovado: $BRANCH"
 
-      - name: Checar Padrão do Último Commit
+      - name: Checar Padrão do Último Commit  
         run: |
           COMMIT_MSG=$(git log -1 --pretty=%B)
           REGEX="^(feat|fix|doc|style|refactor|test|chore|ci)\/(WARJ-[0-9]+|main|sprint-[0-9]+): .+$"
@@ -39,7 +39,9 @@ jobs:
             echo "::error::Mensagem de commit fora do padrão! Ex: feat/WARJ-1: Descrição"
             exit 1
           fi
-          echo "Mensagem de commit aprovada!"
+          # Extrai apenas a primeira linha da mensagem para o log ficar bonito
+          PRIMEIRA_LINHA=$(echo "$COMMIT_MSG" | head -n 1)
+          echo "Mensagem de commit aprovada: $PRIMEIRA_LINHA"
 
   ci:
     name: Lint & Typecheck
