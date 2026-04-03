@@ -13,6 +13,11 @@
 
 <br>
 
+## Initial Configuration
+
+Install [Node.js (preferably version v22.22.0 or higher) and npm.](https://nodejs.org/en/download/archive/v22.22.0)
+
+
 ## Environment Setup
 
 Clone the repository to your local environment and use your preferred IDE (VS Code or WebStorm recommended):
@@ -21,7 +26,6 @@ Clone the repository to your local environment and use your preferred IDE (VS Co
 git clone https://github.com/Warj-Group/API5BD2026Frontend.git
 ```
 
-### Initial Configuration
 Run the automation script to install dependencies and configure Husky hooks:
 
 * **Windows:** `setup-warj.bat`
