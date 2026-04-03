@@ -4,15 +4,15 @@
 @theme static {
   --font-sans: 'Public Sans', sans-serif;
 
-  --color-green-50: #EFFDF5;
-  --color-green-100: #D9FBE8;
-  --color-green-200: #B3F5D1;
-  --color-green-300: #75EDAE;
-  --color-green-400: #00DC82;
-  --color-green-500: #00C16A;
-  --color-green-600: #00A155;
-  --color-green-700: #007F45;
-  --color-green-800: #016538;
-  --color-green-900: #0A5331;
-  --color-green-950: #052E16;
+  /* Cores Oficiais WARJ [cite: 9, 10, 77] */
+  --color-warj-deep: #210B45;   /* Roxo IA / Títulos [cite: 10, 77] */
+  --color-warj-tech: #6F42C1;   /* Roxo Tecnológico / Bordas [cite: 10, 77] */
+  --color-warj-neon: #00D9A6;   /* Verde Neon / Ações [cite: 10, 77] */
+  --color-warj-bg: #F8F9FA;     /* Fundo da Aplicação  */
+  --color-warj-grey: #6C757D;   /* Texto Secundário [cite: 10, 77] */
+}
+
+body {
+  background-color: var(--color-warj-bg);
+  color: var(--color-warj-deep);
 }
