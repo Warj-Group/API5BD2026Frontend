@@ -11,7 +11,7 @@ if ! command -v npm &> /dev/null; then
 fi
 
 echo "[1/4] Instalando dependências..."
-npm install
+npm install --ignore-scripts
 
 echo "[2/4] Criando commitlint.config.js (Formato ESM)..."
 cat << 'EOF' > commitlint.config.js
