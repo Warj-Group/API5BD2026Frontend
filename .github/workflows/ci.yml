@@ -1,20 +1,49 @@
-name: Frontend CI & SonarCloud
+name: Frontend CI, Patters & SonarCloud
 
 on:
   push:
     branches:
-      - main
+      - '**'
   pull_request:
     branches:
-      - main
-      - sprint-1
-      - sprint-2
-      - sprint-3
+      - 'main'
+      - 'sprint-*'
     types: [opened, synchronize, reopened]
 
 jobs:
+  validate-git:
+    name: Validar Git (Branch e Commits)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Checar Nome da Branch
+        run: |
+          BRANCH=${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}
+          REGEX="^(main|sprint-[0-9]+)$|^(feature|hotfix|release)\/WARJ-[0-9]+-.+$"
+          if [[ ! $BRANCH =~ $REGEX ]]; then
+            echo "::error::Nome de branch inválido ($BRANCH). Use feature/WARJ-X-nome, hotfix/ ou release/"
+            exit 1
+          fi
+          echo "Nome da branch aprovado: $BRANCH"
+
+      - name: Checar Padrão do Último Commit
+        if: github.event_name == 'push' # <-- Só roda em push, ignora o merge commit do PR
+        run: |
+          COMMIT_MSG=$(git log -1 --format=%s) # <-- %s pega só a primeira linha do commit
+          REGEX="^(feat|fix|doc|style|refactor|test|chore|ci)\/(WARJ-[0-9]+|main|sprint-[0-9]+): .+$"
+          if [[ ! "$COMMIT_MSG" =~ $REGEX ]]; then
+            echo "::error::Mensagem de commit fora do padrão! Lido: '$COMMIT_MSG'"
+            exit 1
+          fi
+          PRIMEIRA_LINHA=$(echo "$COMMIT_MSG" | head -n 1)
+          echo "Mensagem de commit aprovada: $PRIMEIRA_LINHA"
+
   ci:
     name: Lint & Typecheck
+    needs: validate-git
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -23,32 +52,32 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Install pnpm
-        uses: pnpm/action-setup@v4
-        with:
-          version: 10.29.3 # Ou a versão específica que você usa: 10.29.3
-
       - name: Install node
         uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node }}
-          cache: pnpm
+          cache: npm
 
       - name: Install dependencies
-        run: pnpm install --no-frozen-lockfile --ignore-scripts
+        run: npm install --ignore-scripts
 
       - name: Prepare Nuxt (Generate types)
-        run: pnpm exec nuxi prepare
+        run: npx nuxi prepare
 
       - name: Lint
-        run: pnpm run lint
+        run: npm run lint
 
       - name: Typecheck
-        run: pnpm run typecheck
+        run: npm run typecheck
+
+      - name: Test Production Build
+        if: github.event_name == 'pull_request'
+        run: npm run build
 
   sonarcloud:
     name: SonarCloud Scan
     needs: ci
+    if: github.event_name == 'pull_request'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Código

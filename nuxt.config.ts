@@ -11,6 +11,17 @@ export default defineNuxtConfig({
     gray: 'slate'
   },
 
+  vite: {
+    optimizeDeps: {
+      include: [
+        '@vue/devtools-core',
+        '@vue/devtools-kit',
+        'vue-chartjs',
+        'chart.js'
+      ]
+    }
+  },
+
   app: {
     head: {
       title: 'WARJ Insights',
