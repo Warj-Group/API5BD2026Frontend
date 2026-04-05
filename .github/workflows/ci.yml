@@ -30,7 +30,7 @@ jobs:
           echo "Nome da branch aprovado: $BRANCH"
 
       - name: Checar Padrão do Último Commit
-        if: github.event_name == 'push' # <-- Só roda em push, ignora o merge commit do PR
+        if: github.event_name == 'push'
         run: |
           COMMIT_MSG=$(git log -1 --format=%s) # <-- %s pega só a primeira linha do commit
           REGEX="^(feat|fix|doc|style|refactor|test|chore|ci)\/(WARJ-[0-9]+|main|sprint-[0-9]+): .+$"
