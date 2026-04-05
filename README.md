@@ -1,6 +1,6 @@
 
 <div align="center">
-  <img src="public/warj_banner2.png" width="600" alt="Banner API5">
+  <img src="public/warj_banner2.png" width="850" alt="Banner API5">
 
   # API5BD2026 - Frontend
 
@@ -24,6 +24,7 @@ Clone the repository to your local environment and use your preferred IDE (VS Co
 
 ```bash
 git clone https://github.com/Warj-Group/API5BD2026Frontend.git
+cd API5BD2026Frontend
 ```
 
 Run the automation script to install dependencies and configure Husky hooks:
