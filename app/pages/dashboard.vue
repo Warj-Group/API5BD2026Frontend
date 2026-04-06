@@ -1,7 +1,16 @@
 <template>
   <div class="flex flex-col gap-8 w-full font-sans">
     
-    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+    <!-- Loading State -->
+    <div v-if="loading" class="flex items-center justify-center h-96">
+      <div class="text-center">
+        <div class="w-12 h-12 border-4 border-gray-200 border-t-[#6F42C1] rounded-full animate-spin mx-auto mb-4"></div>
+        <p class="text-[#6C757D] font-medium">Carregando dashboard...</p>
+      </div>
+    </div>
+
+    <div v-else class="flex flex-col gap-8">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
       <div>
         <h2 class="text-2xl font-bold text-[#210B45]">Dashboard</h2>
         <p class="text-sm font-medium text-[#6C757D]">Visão geral e desempenho do sistema.</p>
@@ -90,58 +99,138 @@
         </template>
       </UCard>
     </div>
-
+    </div>
   </div>
 </template>
 
-<script setup>
-import { ref } from 'vue'
+<script setup lang="ts">
+import { ref, onMounted, computed } from 'vue'
 import { Line } from 'vue-chartjs'
-import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Filler, Legend } from 'chart.js'
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Title,
+  Tooltip,
+  Filler,
+  Legend
+} from 'chart.js'
+import { dashboardService } from '~/services/dashboardService'
+import type { DashboardResumoResponse, DashboardProjetoResponse } from '~/types/dashboard'
 
 // Registro dos módulos do Chart.js
-ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Filler, Legend)
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Title,
+  Tooltip,
+  Filler,
+  Legend
+)
 
 // Filtro do gráfico
 const view = ref('Mensal')
 
-// --- DADOS DOS KPIs ---
-// Usando as cores estratégicas: Verde Neon para crescimento [cite: 81]
-const stats = [
-  { label: 'Receita Total', value: '$6F42C1', trend: '+15.2%', trendIcon: 'i-lucide-trending-up' },
-  { label: 'Usuários Ativos', value: '1.350', trend: '+5.4%', trendIcon: 'i-lucide-users' },
-  { label: 'Taxa de Conversão', value: '3.24%', trend: '+12.1%', trendIcon: 'i-lucide-mouse-pointer-click' },
-  { label: 'NPS (Satisfação)', value: '94/100', trend: '+8.0%', trendIcon: 'i-lucide-smile' }
-]
+// Estados de dados
+const loading = ref(true)
+const resumo = ref<DashboardResumoResponse | null>(null)
+const projetos = ref<DashboardProjetoResponse[]>([])
 
-// --- DADOS DO FEED DE ATIVIDADE ---
-const recentActivity = [
-  { title: 'Novo usuário cadastrado', desc: 'Ana Souza finalizou o onboarding.', time: 'Há 5 minutos', icon: 'i-lucide-user-plus' },
-  { title: 'Relatório exportado', desc: 'Willian exportou "Dados_Q1.csv".', time: 'Há 2 horas', icon: 'i-lucide-file-down' },
-  { title: 'Meta atingida', desc: 'Ultrapassamos 1.000 acessos simultâneos.', time: 'Ontem às 14:30', icon: 'i-lucide-target' },
-  { title: 'Sistema atualizado', desc: 'Patch v4.3.1 aplicado com sucesso.', time: 'Ontem às 02:00', icon: 'i-lucide-server' }
-]
+// --- KPIs derivados dos dados do backend ---
+const stats = computed(() => {
+  if (!resumo.value) return []
 
-// --- CONFIGURAÇÃO DO GRÁFICO (CHART.JS) ---
-// Usando as cores neutras e frias (Roxo Tecnológico) para a estrutura de dados [cite: 80, 83]
-const chartData = {
-  labels: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul'],
-  datasets: [
+  return [
     {
-      label: 'Crescimento de Receita',
-      data: [65, 59, 80, 81, 56, 95, 110],
-      borderColor: '#6F42C1', // Roxo Tecnológico [cite: 83]
-      backgroundColor: 'rgba(111, 66, 193, 0.15)', // Fundo com opacidade
-      borderWidth: 3,
-      pointBackgroundColor: '#00D9A6', // Pontos em Verde Neon
-      pointBorderColor: '#fff',
-      pointHoverBackgroundColor: '#fff',
-      pointHoverBorderColor: '#00D9A6',
-      fill: true,
-      tension: 0.4 // Deixa a linha curvada/suave
+      label: 'Total de Projetos',
+      value: resumo.value.total_projetos,
+      trend: '+0%',
+      trendIcon: 'i-lucide-trending-up'
+    },
+    {
+      label: 'Custo Total',
+      value: `R$ ${(Number(resumo.value.custo_total_geral) / 1000).toFixed(1)}k`,
+      trend: `R$ ${Number(resumo.value.custo_medio_por_projeto).toFixed(2)}/proj.`,
+      trendIcon: 'i-lucide-wallet'
+    },
+    {
+      label: 'Total de Horas',
+      value: Number(resumo.value.total_horas_geral),
+      trend: 'h',
+      trendIcon: 'i-lucide-clock'
+    },
+    {
+      label: 'Custo de Materiais',
+      value: `R$ ${(Number(resumo.value.custo_materiais_geral) / 1000).toFixed(1)}k`,
+      trend: '+Variável',
+      trendIcon: 'i-lucide-box'
     }
   ]
-}
+})
+
+// --- Atividade recente derivada dos projetos ---
+const recentActivity = computed(() => {
+  const projetosList = projetos.value || []
+  if (projetosList.length === 0) return []
+
+  return projetosList.slice(0, 4).map(projeto => ({
+    title: projeto?.nome_projeto || 'Projeto sem nome',
+    desc: `Status: ${projeto?.status || 'N/A'} | Responsável: ${projeto?.responsavel || 'N/A'}`,
+    time: `R$ ${Number(projeto?.custo_total || 0).toFixed(2)}`,
+    icon: 'i-lucide-briefcase'
+  }))
+})
+
+// --- Dados do gráfico derivados dos projetos ---
+const chartData = computed(() => {
+  const projetosList = projetos.value || []
+  if (projetosList.length === 0) {
+    return {
+      labels: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul'],
+      datasets: [
+        {
+          label: 'Custo por Projeto',
+          data: [0],
+          borderColor: '#6F42C1',
+          backgroundColor: 'rgba(111, 66, 193, 0.15)',
+          borderWidth: 3,
+          pointBackgroundColor: '#00D9A6',
+          pointBorderColor: '#fff',
+          pointHoverBackgroundColor: '#fff',
+          pointHoverBorderColor: '#00D9A6',
+          fill: true,
+          tension: 0.4
+        }
+      ]
+    }
+  }
+
+  const labels = projetosList.slice(0, 7).map((p, i) => `P${i + 1}`)
+  const data = projetosList.slice(0, 7).map(p => Number(p?.custo_total || 0))
+
+  return {
+    labels: labels.length > 0 ? labels : ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul'],
+    datasets: [
+      {
+        label: 'Custo por Projeto',
+        data: data.length > 0 ? data : [0],
+        borderColor: '#6F42C1',
+        backgroundColor: 'rgba(111, 66, 193, 0.15)',
+        borderWidth: 3,
+        pointBackgroundColor: '#00D9A6',
+        pointBorderColor: '#fff',
+        pointHoverBackgroundColor: '#fff',
+        pointHoverBorderColor: '#00D9A6',
+        fill: true,
+        tension: 0.4
+      }
+    ]
+  }
+})
 
 const chartOptions = {
   responsive: true,
@@ -149,7 +238,7 @@ const chartOptions = {
   plugins: {
     legend: { display: false },
     tooltip: {
-      backgroundColor: '#210B45', // Tooltip escuro (Roxo IA) [cite: 77]
+      backgroundColor: '#210B45',
       titleFont: { family: 'Public Sans', size: 13 },
       bodyFont: { family: 'Public Sans', size: 14, weight: 'bold' },
       padding: 12,
@@ -168,4 +257,27 @@ const chartOptions = {
     }
   }
 }
+
+// --- Carrega dados do backend ---
+onMounted(async () => {
+  try {
+    loading.value = true
+    const [resumoData, projetosData] = await Promise.all([
+      dashboardService.getResumo(),
+      dashboardService.getProjetos()
+    ])
+
+    // Tratamento defensivo para diferentes formatos de resposta da API
+    resumo.value = resumoData?.data || resumoData || null
+    projetos.value = Array.isArray(projetosData?.data) ? projetosData.data :
+                    Array.isArray(projetosData) ? projetosData : []
+  } catch (error) {
+    console.error('Erro ao carregar dashboard:', error)
+    // Em caso de erro, garantir que os arrays não sejam undefined
+    projetos.value = []
+    resumo.value = null
+  } finally {
+    loading.value = false
+  }
+})
 </script>
