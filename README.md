@@ -1,61 +1,75 @@
-WARJ-10: Adicionado Sprint-1 para inicialiação do projeto
-# Nuxt Starter Template
 
-[![Nuxt UI](https://img.shields.io/badge/Made%20with-Nuxt%20UI-00DC82?logo=nuxt&labelColor=020420)](https://ui.nuxt.com)
+<div align="center">
+  <img src="public/warj_banner2.png" width="850" alt="Banner API5">
 
-Use this template to get started with [Nuxt UI](https://ui.nuxt.com) quickly.
+  # API5BD2026 - Frontend
 
-- [Live demo](https://starter-template.nuxt.dev/)
-- [Documentation](https://ui.nuxt.com/docs/getting-started/installation/nuxt)
+  [![Nuxt UI](https://img.shields.io/badge/Made%20with-Nuxt%20UI-00DC82?logo=nuxt&labelColor=020420)](https://ui.nuxt.com)
+  [![Vue](https://img.shields.io/badge/Vue.js-4FC08D?style=flat&logo=vuedotjs&logoColor=white)](https://vuejs.org/)
+  [![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=flat&logo=javascript&logoColor=black)](https://developer.mozilla.org/en-US/docs/Web/JavaScript)
+  [![Husky](https://img.shields.io/badge/Husky-64b5f6?style=flat&logo=dog&logoColor=white)](https://typicode.github.io/husky/)
+  [![SonarCloud Quality Gate](https://img.shields.io/sonar/quality_gate/Warj-Group_API5BD2026Frontend?server=https%3A%2F%2Fsonarcloud.io&logo=sonarcloud&style=flat)](https://sonarcloud.io/summary/new_code?id=Warj-Group_API5BD2026Frontend)
+</div>
 
-<a href="https://starter-template.nuxt.dev/" target="_blank">
-  <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="https://ui.nuxt.com/assets/templates/nuxt/starter-dark.png">
-    <source media="(prefers-color-scheme: light)" srcset="https://ui.nuxt.com/assets/templates/nuxt/starter-light.png">
-    <img alt="Nuxt Starter Template" src="https://ui.nuxt.com/assets/templates/nuxt/starter-light.png" width="830" height="466">
-  </picture>
-</a>
+<br>
 
-> The starter template for Vue is on https://github.com/nuxt-ui-templates/starter-vue.
+## Initial Configuration
 
-## Quick Start
+Install [Node.js (preferably version v22.22.0 or higher) and npm.](https://nodejs.org/en/download/archive/v22.22.0)
 
-```bash [Terminal]
-npm create nuxt@latest -- -t github:nuxt-ui-templates/starter
-```
 
-## Deploy your own
+## Environment Setup
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-name=starter&repository-url=https%3A%2F%2Fgithub.com%2Fnuxt-ui-templates%2Fstarter&demo-image=https%3A%2F%2Fui.nuxt.com%2Fassets%2Ftemplates%2Fnuxt%2Fstarter-dark.png&demo-url=https%3A%2F%2Fstarter-template.nuxt.dev%2F&demo-title=Nuxt%20Starter%20Template&demo-description=A%20minimal%20template%20to%20get%20started%20with%20Nuxt%20UI.)
-
-## Setup
-
-Make sure to install the dependencies:
+Clone the repository to your local environment and use your preferred IDE (VS Code or WebStorm recommended):
 
 ```bash
-pnpm install
+git clone https://github.com/Warj-Group/API5BD2026Frontend.git
+cd API5BD2026Frontend
 ```
 
-## Development Server
+Run the automation script to install dependencies and configure Husky hooks:
 
-Start the development server on `http://localhost:3000`:
+* **Windows:** `setup-warj.bat`
+* **Linux/Mac/Git Bash:** `bash setup-warj.sh`
+
+### Execution
+Start the development server:
 
 ```bash
-pnpm dev
+npm run dev
 ```
 
-## Production
+The project will be available at: `http://localhost:3000`
 
-Build the application for production:
+<br>
 
-```bash
-pnpm build
-```
+## Development and Quality
 
-Locally preview production build:
+To maintain code consistency and quality according to DevOps principles, we use ESLint for static analysis.
 
-```bash
-pnpm preview
-```
+* **View errors:** `npm run lint`
+* **Fix errors automatically:** `npm run lint:fix`
 
-Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
+<br>
+
+## Contribution Guidelines
+
+To ensure traceability between YouTrack tasks and GitHub commits, strictly follow the standards below:
+
+### 1. Commit Messages
+Messages must use the task ID for automatic integration with YouTrack:
+* **Format:** `{type}/{yt_id}: Description`
+* **Example:** `feat/WARJ-1: implement product grid`
+
+### 2. Branch Naming Convention
+Create working branches linked to the sprint cards:
+* **Format:** `{type}/{yt_id}-brief-description`
+* **Example:** `feature/WARJ-1-product-grid`
+
+### 3. Automatic Validation
+The project uses Husky and Commitlint. If the commit standard or linting rules are not followed, the submission (push/commit) will be blocked by the terminal with the appropriate correction instructions.
+
+<br>
+
+## Additional Documentation
+For details on the group's architecture, CI/CD, and design patterns, access our Wiki: [WARJ-GROUP - Wiki Documentation](https://github.com/Warj-Group/API5BD2026Main/wiki)
